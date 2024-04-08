@@ -6,7 +6,7 @@
 #include<QDebug>
 Widget::Widget(QWidget *parent)
     : Qwidget(parent)
-    , ui(new Ui::Dialog)
+    , ui(new Ui::Widget)
 {
     ui->setupUi(this);
     this->page3 = new class result1;
