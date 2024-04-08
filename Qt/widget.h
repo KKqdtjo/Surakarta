@@ -170,7 +170,18 @@ public:
 
     QPoint center(int id);
 
+    class result1 *page3 = NULL;//结算画面
+
+    class result2 *page4 = NULL;//结算画面
+
+private slots:
+    void begingame();
+    void TimeOut();
+    void boardreset();
+
 private:
     Ui::Widget *ui;
+    QTimer *ti;
+    int time;
 };
 #endif // WIDGET_H
