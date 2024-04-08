@@ -72,6 +72,35 @@ void Widget::TimeOut()
     }
 }
 
+void Widget::boardreset()
+{
+    for(int i=0;i<24;i++){
+        p[i].init(i);
+        selectid=-1;
+        clickid=-1;
+        count=1;
+        update();
+        time=-1;
+        begingame();
+        QString qstime= QString::number(time);
+        if(time>=0)
+        {
+            ui->timelable->setText(qstime);
+            time--;
+        }
+        else
+        {
+            ui->timelable->setText(qstime);
+            ti->stop();
+            ui->start->setText("start");
+            ui->timelable->setText("开始");
+            ui->currentplayer->setText("黑");
+            ui->start->setDisabled(false);
+            time=10;
+        }
+    }
+}
+
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Widget)
