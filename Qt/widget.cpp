@@ -4,6 +4,73 @@
 #include<QPainter>
 #include<QMouseEvent>
 #include<QDebug>
+Widget::Widget(QWidget *parent)
+    : Qwidget(parent)
+    , ui(new Ui::Dialog)
+{
+    ui->setupUi(this);
+    this->page3 = new class result1;
+    this->page4 = new class result2;
+    for(int i=0;i<24;i++){
+        p[i].init(i);
+    }
+    this->
+        selectid=-1;
+    ui->timelable->setText("开始");
+    ui->currentplayer->setText("黑");
+    time=10;
+    ti = new QTimer(this);
+    connect(ui->start,SIGNAL(clicked(bool)),this,SLOT(begingame()));
+    connect(ui->again,SIGNAL(clicked(bool)),this,SLOT(boardreset()));
+    connect(ui->giveup,&QPushButton::clicked,[=](){
+        if(count%2==0)
+        {
+           this->page3->show();
+        }
+        else{
+            this->page4->show();
+        }
+        boardreset();
+    });
+    connect(ti,SIGNAL(timeout()),this,SLOT(TimeOut()));
+}
+
+Widget::~Widget()
+{
+    delete ui;
+}
+void Widget::begingame()
+{
+    ti->start(1000);
+    ui->start->setDisabled(true);
+}
+
+void Widget::TimeOut()
+{
+    QString qstime= QString::number(time);
+    if(time>=0)
+    {
+        ui->timelable->setText(qstime);
+        time--;
+    }
+    else
+    {
+        ui->timelable->setText(qstime);
+        ti->stop();
+        if(count%2==0)
+        {
+            this->page3->show();
+        }
+        else
+        {
+            this->page4->show();
+        }
+        ui->start->setText("start");
+        ui->timelable->setText("开始");
+        ui->start->setDisabled(false);
+        time=10;
+    }
+}
 
 Widget::Widget(QWidget *parent)
     : QWidget(parent)
