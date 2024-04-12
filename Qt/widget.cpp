@@ -1007,7 +1007,15 @@ void Widget::mouseReleaseEvent(QMouseEvent*ev)
     bool bRet=getRowCol(pt,row,col);
     if(bRet==false)
     {
-        return;
+      if(count%2==0)
+        {
+            this->page3->show();
+            boardreset();
+        }
+     else {
+            this->page4->show();
+            boardreset();
+            }
     }
     int k;
     int clickid=-1;
@@ -1027,11 +1035,17 @@ void Widget::mouseReleaseEvent(QMouseEvent*ev)
     {
         if(clickid!=-1)
         {
-            if(blackturn==_p[clickid]._black)
-            {
-                _selectid=clickid;
-                update();
+            selectid=clickid;
+            if (selectid>=0&&selectid<12&&count%2==0) {
+                this->page3->show();
+                boardreset();
             }
+            else if(selectid>=12&&count%2!=0)
+            {
+                this->page4->show();
+                boardreset();
+            }
+            update();
         }
     }
     else
@@ -1056,7 +1070,20 @@ void Widget::mouseReleaseEvent(QMouseEvent*ev)
             }
             _selectid=-1;
             blackturn=!blackturn;
-            update();
+          update();
+            time=10;
+            begingame();
+            TimeOut();
+             if(count%2==0)
+            {
+                ui->currentplayer->setText("黑");
+                    count++;
+            }
+            else
+            {
+                ui->currentplayer->setText("白");
+                count++;
+            }
         }
         if(judgeEnd()==1)
         {
