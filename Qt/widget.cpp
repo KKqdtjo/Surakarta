@@ -1087,15 +1087,11 @@ void Widget::mouseReleaseEvent(QMouseEvent*ev)
         }
         if(judgeEnd()==1)
         {
-            qDebug()<<"The game is over";
-            qDebug()<<"The winner is WHITE";
-            qDebug()<<"The total step is"<<step;
+           this->page3->show();
         }
         if(judgeEnd()==2)
         {
-            qDebug()<<"The game is over";
-            qDebug()<<"The winner is BLACK";
-            qDebug()<<"The total step is"<<step;
+           this->page4->show();
         }
     }
 }
