@@ -999,12 +999,39 @@ bool Widget::canMove(int moveid,int row,int col,int killid)
     return false;
 
 }
-
+int Dialog::getBlackNum()
+{
+    int count=0;
+    for(int i=0;i<12;i++)
+    {
+        if(p[i]._dead==false)
+        {
+            count++;
+        }
+    }
+    return count;
+}
+int Dialog::getWhiteNum()
+{
+    int count=0;
+    for(int i=12;i<24;i++)
+    {
+        if(p[i]._dead==false)
+        {
+            count++;
+        }
+    }
+    return count;
+}
 void Widget::mouseReleaseEvent(QMouseEvent*ev)
 {
     QPoint pt=ev->pos();
     int row,col;
     bool bRet=getRowCol(pt,row,col);
+        if(last_capture_count>=40)
+    {
+        return;
+    }
     if(bRet==false)
     {
       if(count%2==0)
@@ -1052,14 +1079,13 @@ void Widget::mouseReleaseEvent(QMouseEvent*ev)
     {
         if(canMove(_selectid,row,col,clickid))
         {
-            step++;
-            if(blackturn)
+            if(count%2==0)
             {
-                qDebug()<<"STEP"<<step<<" "<<"BLACK:"<<"("<<_p[_selectid]._row+1<<","<<_p[_selectid]._col+1<<")"<<"->("<<row+1<<","<<col+1<<")";
+                qDebug()<<"STEP"<<count<<" "<<"BLACK:"<<"("<<_p[_selectid]._row+1<<","<<_p[_selectid]._col+1<<")"<<"->("<<row+1<<","<<col+1<<")";
             }
             else
             {
-                qDebug()<<"STEP"<<step<<" "<<"WHITE:"<<"("<<_p[_selectid]._row+1<<","<<_p[_selectid]._col+1<<")"<<"->("<<row+1<<","<<col+1<<")";
+                qDebug()<<"STEP"<<count<<" "<<"WHITE:"<<"("<<_p[_selectid]._row+1<<","<<_p[_selectid]._col+1<<")"<<"->("<<row+1<<","<<col+1<<")";
             }
             //移动棋子
             _p[_selectid]._row=row;
@@ -1067,6 +1093,7 @@ void Widget::mouseReleaseEvent(QMouseEvent*ev)
             if(clickid!=-1)
             {
                 _p[clickid]._dead=true;
+             last_capture_count=0;
             }
             _selectid=-1;
             blackturn=!blackturn;
@@ -1083,6 +1110,31 @@ void Widget::mouseReleaseEvent(QMouseEvent*ev)
             {
                 ui->currentplayer->setText("白");
                 count++;
+            }
+        }
+                else
+        {
+            last_capture_count++;
+            if(last_capture_count>=40)
+            {
+                if(getBlackNum()>getWhiteNum())
+                {
+                    qDebug()<<"The game is over";
+                    qDebug()<<"The winner is BLACK";
+                    qDebug()<<"The total step is"<<count;
+                }
+                else if(getBlackNum()>getWhiteNum())
+                {
+                    qDebug()<<"The game is over";
+                    qDebug()<<"The winner is WHITE";
+                    qDebug()<<"The total step is"<<count;
+                }
+                else
+                {
+                    qDebug()<<"The game is over";
+                    qDebug()<<"stalemate";
+                    qDebug()<<"The total step is"<<count;
+                }
             }
         }
         if(judgeEnd()==1)
